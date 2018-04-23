@@ -176,11 +176,11 @@ Produce a list from the column headings stored in the data frame:
 cols = list(data[['Sepal width (cm)','Sepal length (cm)','Petal width (cm)','Petal length (cm)']])
 ```
 
-Then produce a histogram per feature using a for statement and the enumerate function to loop over the cols list and have an automatic counter (num):
+Then produce a histogram per feature using a for statement and the enumerate function to loop over the cols list and have an automatic counter (num) with the subsetting function sephist defined above. These four histograms are then plotted on a 2 x 2 grid using matplotlib.pyplot.subplot:
 
 ```python
 for num, alpha in enumerate(cols):
-    plt.subplot(2, 2, num + 1) # num + 1 missing from original solution in[13]
+    plt.subplot(2, 2, num + 1) # num + 1 missing from original solution in [13]
     plt.hist(sephist(alpha)[0], alpha=0.6, label='setosa')
     plt.hist(sephist(alpha)[1], alpha=0.6, label='versicolor')
     plt.hist(sephist(alpha)[2], alpha=0.6, label='virginica')
@@ -190,7 +190,6 @@ plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 plt.savefig('figures/fig4.jpg') # save to figures/ directory
 plt.close()
 ```
-https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig1.jpg
 
 <p align="center">
   <img alt="Histograms of Fisher's Iris Data" src="https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig4.jpg">
@@ -199,8 +198,20 @@ https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig1.jpg
   <b>Figure 4.</b> Histograms of Fisher's Iris data; code adapted from [13].<br>
 </p>
 
+Scatterplots facilitate the discovery relationships between features and examine whether these relationships are consistent across species if the data points are appropriately coloured. The pairplot module of the [seaborn visualisation library](https://seaborn.pydata.org/) provides scatterplot functionality across features and colourises data points using hue. 
 
+```python
+import seaborn as sns
+fig5 = sns.pairplot(data, hue='species', size=2)
+fig5.fig.subplots_adjust(right = 0.8) # If this is not included, the legend renders over the plot [14] 
+```
 
+<p align="center">
+  <img alt="Pairplot of Fisher's Iris Data" src="https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig5.jpg">
+</p>
+<p align="center">
+  <b>Figure 5.</b> Pairplot of Fisher's Iris data using seaborn.pairplot.<br>
+</p>
 
 ### Analyses
 #### Comparison across classes
@@ -232,4 +243,6 @@ https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig1.jpg
 	https://matplotlib.org/api/pyplot_api.html
 13.	Brad Soloman, stackoverflow
 	https://stackoverflow.com/revisions/45884249/5
+14. Goyo, stackoverflow
+	https://stackoverflow.com/revisions/40910102/2
 
