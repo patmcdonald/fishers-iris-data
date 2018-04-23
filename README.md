@@ -195,7 +195,7 @@ plt.close()
   <img alt="Histograms of Fisher's Iris Data" src="https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig4.jpg">
 </p>
 <p align="center">
-  <b>Figure 4.</b> Histograms of Fisher's Iris data; code adapted from [13].<br>
+  <b>Figure 4.</b> Histograms of Fisher's Iris data; script adapted from [13].<br>
 </p>
 
 Scatterplots facilitate the discovery relationships between features and examine whether these relationships are consistent across species if the data points are appropriately coloured. The pairplot module of the [seaborn visualisation library](https://seaborn.pydata.org/) provides scatterplot functionality across features and colourises data points using hue. 
@@ -215,7 +215,33 @@ fig5.fig.subplots_adjust(right = 0.8) # If this is not included, the legend rend
 
 ### Analyses
 #### Comparison across classes
+To test the hypothesis that the distribution of these features differ across species, I could repeat the Analysis of Variance (ANOVA) conducted by Fisher [7], but given the [non-normal](http://www.ucl.ac.uk/ich/short-courses-events/about-stats-courses/stats-rm/Chapter_3_Content/Non_Normal_Data) and [heteroscedastic](https://en.wikipedia.org/wiki/Heteroscedasticity) distribution of the data in the histograms (Fig.4) I chose the non-parametric equivalent, the Kruskal-Wallis test [15]. This tests if the ranks of data across species are drawn from the same distribution.
+
+The [SciPy library](https://www.scipy.org/), a Python-based ecosystem of open-source software for mathematics, science, and engineering, for Kruskal Wallis test functionality (scipy.stats.kruskal). Adapting the script from [16], a function was written to produce the Kruskal-Wallis test statistic H and p-value for each feature.
+
+```python
+import scipy.stats as sc
+def KW(x):
+    data.species = np.array(data.species) # convert `data.species` to a numpy array for indexing
+    label, idsp = np.unique(x, return_inverse=True) # find unique group labels and their corresponding indices
+    groups = [data.species[idsp == i] for i, l in enumerate(label)] # make a list of arrays containing the data.species values corresponding to each unique label
+    H, p = sc.kruskal(*groups) # use `*` to unpack the list as a sequence of arguments
+    print(H, p)
+KW(data['Sepal width (cm)'])
+KW(data['Sepal length (cm)'])
+KW(data['Petal width (cm)'])
+KW(data['Petal length (cm)'])
+```
+Feature | H | p
+--- | --- | ---
+Sepal width | 47.010 | < 0.01
+Sepal length | 107.293 | < 0.001
+Petal width | 141.984 | < 0.001
+Petal length | 141.997 | < 0.001
+
 #### Correlation
+
+
 #### Classification
 
 ## Summary of results
@@ -245,4 +271,8 @@ fig5.fig.subplots_adjust(right = 0.8) # If this is not included, the legend rend
 	https://stackoverflow.com/revisions/45884249/5
 14. Goyo, stackoverflow
 	https://stackoverflow.com/revisions/40910102/2
+15. Statsoft Textbook: Non-parametric statistics
+	http://www.statsoft.com/Textbook/Nonparametric-Statistics
+16. ali_m, stackoverflow
+	https://stackoverflow.com/revisions/35301638/3
 
