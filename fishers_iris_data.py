@@ -86,8 +86,7 @@ for num, alpha in enumerate(cols):
 	plt.legend(loc='upper right')
     plt.title(alpha)
 plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
-plt.show()
-plt.savefig('figures/fig1.jpg') # save to figures directory
+plt.savefig('figures/fig4.jpg') # save to figures directory
 plt.close() # to clear all features to produce the next figure (I found out the hard way!): https://matplotlib.org/api/_as_gen/matplotlib.pyplot.close.html
 
 # Import the seaborn visualisation library to produce a pairplot. The pairplot will produce stacked histograms (which I dislike) and scatterplots of numerical features, coloured according to Iris species: https://seaborn.pydata.org/generated/seaborn.pairplot.html
@@ -99,7 +98,7 @@ import seaborn as sns
 fig2 = sns.pairplot(data, hue='species', size=2) # hue identifies the class to colourise; size is height (in inches!) of each facet
 fig2.fig.subplots_adjust(right = 0.8) # There was a bug in seaborn as the legend is rendered over the pairplot, not outside to the centre right. The solution used on this line to adjust the right margin was posted here: https://stackoverflow.com/questions/37815774/seaborn-pairplot-legend-how-to-control-position
 
-plt.savefig('figures/fig2.jpg')
+plt.savefig('figures/fig5.jpg')
 
 # To test statistical differences between the species across the measured features, I wanted to repeat the ANOVA analyses in Fisher's original paper but from the figures it was clear that other than Fig. 2, the data was largely non-normal and heteroscedastic so I chose non-parametric tests. I could test for normality too (e.g. Shapiro-Wilk), but with a sample size of 50 across groups there may not be sufficient power to reject normality making the test meaningless.
 

@@ -160,7 +160,47 @@ Maximum |	0.6 |	1.8 |	2.5
 
 Histograms illustrate the shape of the distribution of each feature per species. This aids the identification of the differences, or lack thereof, between species per feature. When exploring differences between classes, I think unstacked histograms per class plotted with the entire distribution in the background more ameniable to interpretation than stacked histograms.
 
-Initially, I tried to plot a histogram using the pandas .groupby function but this did not produce the expected panel of histograms (identical issue reproted [here](https://stackoverflow.com/questions/45883598/pandas-histogram-df-hist-group-by) on stackoverflow). 
+Initially, I tried to plot a histogram using the pandas .groupby function but this did not produce the expected panel of histograms (identical issue reproted [here](https://stackoverflow.com/questions/45883598/pandas-histogram-df-hist-group-by) on stackoverflow). The solution [13] is first to have a function that subsets each feature ('col' below) by species:
+
+```python
+def sephist(col):
+    setosa = data[data['species'] == 'Iris-setosa'][col]
+    versicolor = data[data['species'] == 'Iris-versicolor'][col]
+    virginica = data[data['species'] == 'Iris-virginica'][col]
+	return setosa, versicolor, virginica
+```
+
+Produce a list from the column headings stored in the data frame:
+
+```python
+cols = list(data[['Sepal width (cm)','Sepal length (cm)','Petal width (cm)','Petal length (cm)']])
+```
+
+Then produce a histogram per feature using a for statement and the enumerate function to loop over the cols list and have an automatic counter (num):
+
+```python
+for num, alpha in enumerate(cols):
+    plt.subplot(2, 2, num + 1) # num + 1 missing from original solution in[13]
+    plt.hist(sephist(alpha)[0], alpha=0.6, label='setosa')
+    plt.hist(sephist(alpha)[1], alpha=0.6, label='versicolor')
+    plt.hist(sephist(alpha)[2], alpha=0.6, label='virginica')
+		plt.legend(loc='upper right')
+    plt.title(alpha)
+plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
+plt.savefig('figures/fig4.jpg') # save to figures/ directory
+plt.close()
+```
+https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig1.jpg
+
+<p align="center">
+  <img alt="Histograms of Fisher's Iris Data" src="https://github.com/tomasmurray/fishers-iris-data/blob/master/figures/fig4.jpg">
+</p>
+<p align="center">
+  <b>Figure 4.</b> Histograms of Fisher's Iris data; code adapted from [13].<br>
+</p>
+
+
+
 
 ### Analyses
 #### Comparison across classes
@@ -190,4 +230,6 @@ Initially, I tried to plot a histogram using the pandas .groupby function but th
 	http://www.numpy.org/
 12.	pyplot module of the Matplotib library for Python
 	https://matplotlib.org/api/pyplot_api.html
-13.	
+13.	Brad Soloman, stackoverflow
+	https://stackoverflow.com/revisions/45884249/5
+
